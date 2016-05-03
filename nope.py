@@ -7,23 +7,35 @@ def parse(ll):
 	end = []
 	for l in ll:
 		if l[0] == "\t":
-			end.append(l[0] + "(" + l[1:])
-			parencounter = parencounter + ")"
-		elif l[0] == "\n":
+			if l[tablevel]:
+				if l[tablevel] == "\t":
+					end.append(l[0] + "(" + l[1:])
+					parencounter = parencounter + ")"
+					tablevel += 1
+				else: 
+					end.append("(" + l + ")")
+			# this is all a dirty hack based on 0-based indexing.
+		elif l[0] == "":
+			end.append(parencounter + l)
+			tablevel = 0
+		elif tablevel == 0:
+			end.append(l)
+		else:
+			end.append("(" + l + ")")
+	end.append(parencounter)
+	print end
+	print
+	return "".join(end)
 			# it would be nice to just append the close parens to the end of previous line, but maybe that's an after-the-fact task
-			# close all open parens
-			# make it parse like python and not depend on counting linebreaks, instead store tab level?
-			# tab level is just number of parens...
-			# actually need tab level for 
-			# but the only time we should have same tab level is when there are side effects like in a 
-			# dosync kind of thing... 
 			# consequence of this is it won't allow implicit line continuations...
 
-
-
-
+# this isn't working, is putting close parens in front of lines that shouldn't have close parens. 
 
 if __name__ == "__main__":
 	with open(sys.argv[1]) as f:
 		lines = f.readlines()
-		parse(lines)
+		print lines
+		print
+		print parse(lines)
+
+
