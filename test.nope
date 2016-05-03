@@ -1,0 +1,5 @@
+print
+	str "hello" "world"
+
+print
+	str "goodbye" "cruel" "parentheses" 
